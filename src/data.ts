@@ -12,7 +12,7 @@ export const questions: Question[] = [
     dimension: "面对背叛",
     scene: "你最信任的盟友在关键时刻出卖了你，导致你全军覆没。你侥幸逃生后，会怎么做？",
     options: [
-      { text: "冷静分析局势，布下一个更庞大的局，让他失去一切，生不如死。", maleIds: ['mocangli', 'wenhuang', 'yuxingyi'], femaleIds: ['huanghou', 'weishanhu', 'yaomingyue'] },
+      { text: "冷静分析局势，布下一个更庞大的局，让他失去一切，生不如死。", maleIds: ['mocangli', 'wenhuang', 'yuxingyi', 'wumengsheng'], femaleIds: ['huanghou', 'weishanhu', 'yaomingyue'] },
       { text: "直接杀上门去，用最残忍的方式将其碎尸万段，以泄心头之恨。", maleIds: ['fengduyue', 'fojian', 'yiqixing'], femaleIds: ['jinyanxia', 'muchengxue'] },
       { text: "探明他背叛的苦衷，如果情有可原，便留他一命，但从此恩断义绝。", maleIds: ['suhuanzhen', 'qiaorulai', 'quezhou'], femaleIds: ['changqin', 'linruomei'] },
       { text: "一笑置之，认为这是命运的考验，独自饮下一壶烈酒，重新开始。", maleIds: ['jianzi', 'longxiu', 'qiluosheng', 'zuiguangyin'], femaleIds: ['jiwuxia', 'fengdie', 'hanyancui'] }
@@ -25,7 +25,7 @@ export const questions: Question[] = [
     options: [
       { text: "毫不犹豫地坐上去。情感是软肋，权力才是永恒的真理。", maleIds: ['mocangli', 'wenhuang'], femaleIds: ['huanghou', 'yaomingyue', 'weishanhu'] },
       { text: "一剑劈碎王座。我命由我不由天，不需要这种肮脏的施舍。", maleIds: ['yiqixing', 'fojian', 'fengduyue'], femaleIds: ['muchengxue', 'jiwuxia'] },
-      { text: "将其封印。这种力量太危险，不能落入任何人手中，我来承担看守的责任。", maleIds: ['quezhou', 'suhuanzhen', 'qiaorulai'], femaleIds: ['changqin', 'linruomei'] },
+      { text: "将其封印。这种力量太危险，不能落入任何人手中，我来承担看守的责任。", maleIds: ['quezhou', 'suhuanzhen', 'qiaorulai', 'wumengsheng'], femaleIds: ['changqin', 'linruomei'] },
       { text: "转身离开。高处不胜寒，不如与知己在江湖中逍遥快活。", maleIds: ['jianzi', 'longxiu', 'qiluosheng', 'zuiguangyin'], femaleIds: ['fengdie', 'hanyancui', 'jinyanxia'] }
     ]
   },
@@ -34,7 +34,7 @@ export const questions: Question[] = [
     dimension: "绝境的选择",
     scene: "你和你的爱人/挚友被困在绝谷，只有一份解药，你会怎么做？",
     options: [
-      { text: "把解药给对方，自己坦然赴死，并在死前为对方安排好一切退路。", maleIds: ['suhuanzhen', 'qiaorulai', 'yuxingyi'], femaleIds: ['linruomei', 'hanyancui', 'fengdie'] },
+      { text: "把解药给对方，自己坦然赴死，并在死前为对方安排好一切退路。", maleIds: ['suhuanzhen', 'qiaorulai', 'yuxingyi', 'wumengsheng'], femaleIds: ['linruomei', 'hanyancui', 'fengdie'] },
       { text: "把解药给对方，然后自己跳下悬崖，不让对方看到自己毒发的样子。", maleIds: ['qiluosheng', 'zuiguangyin', 'longxiu'], femaleIds: ['jiwuxia', 'muchengxue'] },
       { text: "自己吃下解药。活下去才能复仇，死人的深情毫无意义。", maleIds: ['mocangli', 'wenhuang', 'kouyinzi'], femaleIds: ['huanghou', 'yaomingyue', 'weishanhu'] },
       { text: "将解药毁掉。既然不能同生，那便一起死在这里，永远不分离。", maleIds: ['fengduyue', 'fojian'], femaleIds: ['jinyanxia', 'changqin'] }
@@ -47,7 +47,7 @@ export const questions: Question[] = [
     options: [
       { text: "视而不见，径直赶路。大局为重，几条人命与天下苍生相比微不足道。", maleIds: ['mocangli', 'wenhuang', 'yuxingyi'], femaleIds: ['huanghou', 'weishanhu', 'yaomingyue'] },
       { text: "雷霆出手，瞬间秒杀强盗，然后继续赶路，不留姓名。", maleIds: ['fojian', 'yiqixing', 'jianzi'], femaleIds: ['jiwuxia', 'muchengxue'] },
-      { text: "留下来保护流民，安顿好他们。至于会谈，我会用其他方式阻止战争。", maleIds: ['suhuanzhen', 'qiaorulai', 'quezhou'], femaleIds: ['changqin', 'linruomei'] },
+      { text: "留下来保护流民，安顿好他们。至于会谈，我会用其他方式阻止战争。", maleIds: ['suhuanzhen', 'qiaorulai', 'quezhou', 'wumengsheng'], femaleIds: ['changqin', 'linruomei'] },
       { text: "随手抛下一些金银和暗器，让他们自己保护自己，生死由命。", maleIds: ['longxiu', 'qiluosheng', 'zuiguangyin'], femaleIds: ['fengdie', 'hanyancui', 'jinyanxia'] }
     ]
   },
@@ -69,7 +69,7 @@ export const questions: Question[] = [
     options: [
       { text: "顺水推舟，坐实这些谣言，让恐惧成为你最好的武器。", maleIds: ['mocangli', 'wenhuang', 'fengduyue'], femaleIds: ['huanghou', 'yaomingyue', 'weishanhu'] },
       { text: "清者自清，不屑解释。时间会证明一切，懂我的人自然懂。", maleIds: ['yiqixing', 'jianzi', 'longxiu', 'zuiguangyin'], femaleIds: ['jiwuxia', 'muchengxue', 'changqin'] },
-      { text: "暗中调查，揪出造谣者，用最温和的手段让他身败名裂。", maleIds: ['suhuanzhen', 'yuxingyi', 'qiaorulai'], femaleIds: ['linruomei', 'fengdie'] },
+      { text: "暗中调查，揪出造谣者，用最温和的手段让他身败名裂。", maleIds: ['suhuanzhen', 'yuxingyi', 'qiaorulai', 'wumengsheng'], femaleIds: ['linruomei', 'fengdie'] },
       { text: "直接杀到流言的源头，用剑让所有闭嘴。", maleIds: ['fojian', 'qiluosheng', 'kouyinzi'], femaleIds: ['jinyanxia', 'hanyancui'] }
     ]
   },
@@ -92,7 +92,7 @@ export const questions: Question[] = [
       { text: "放弃这个机会。过去的遗憾造就了现在的我，改变过去就是否定自己。", maleIds: ['yiqixing', 'fojian', 'jianzi'], femaleIds: ['jiwuxia', 'changqin'] },
       { text: "回到过去，不择手段地阻止那场悲剧，哪怕引发更大的灾难。", maleIds: ['fengduyue', 'kouyinzi'], femaleIds: ['jinyanxia', 'hanyancui', 'muchengxue'] },
       { text: "回到过去，只做一个旁观者，默默地再看一眼那个已经失去的人。", maleIds: ['qiluosheng', 'zuiguangyin', 'longxiu'], femaleIds: ['fengdie', 'linruomei'] },
-      { text: "利用这个机会回到过去，提前布局，获取更多的利益和权力。", maleIds: ['mocangli', 'wenhuang', 'yuxingyi'], femaleIds: ['huanghou', 'weishanhu', 'yaomingyue'] }
+      { text: "利用这个机会回到过去，提前布局，获取更多的利益和权力。", maleIds: ['mocangli', 'wenhuang', 'yuxingyi', 'wumengsheng'], femaleIds: ['huanghou', 'weishanhu', 'yaomingyue'] }
     ]
   },
   {
@@ -111,7 +111,7 @@ export const questions: Question[] = [
     dimension: "终局的姿态",
     scene: "漫长的旅途终于到了终点，你站在世界的尽头，最后的回眸，你看到了什么？",
     options: [
-      { text: "一盘尚未下完的残局，还有无数的变数在等待着后来者。", maleIds: ['mocangli', 'wenhuang', 'yuxingyi'], femaleIds: ['huanghou', 'weishanhu'] },
+      { text: "一盘尚未下完的残局，还有无数的变数在等待着后来者。", maleIds: ['mocangli', 'wenhuang', 'yuxingyi', 'wumengsheng'], femaleIds: ['huanghou', 'weishanhu'] },
       { text: "一场盛大的落雪，掩盖了所有的爱恨情仇，大地白茫茫一片真干净。", maleIds: ['quezhou', 'jianzi', 'qiaorulai'], femaleIds: ['changqin', 'jiwuxia'] },
       { text: "一簇永不熄灭的篝火，那是你曾经燃烧过的证明。", maleIds: ['fojian', 'yiqixing', 'kouyinzi'], femaleIds: ['linruomei', 'jinyanxia'] },
       { text: "一面巨大的镜子，里面映出你似笑非笑的脸庞，仿佛一切只是个玩笑。", maleIds: ['longxiu', 'qiluosheng', 'zuiguangyin', 'fengduyue'], femaleIds: ['yaomingyue', 'muchengxue', 'hanyancui', 'fengdie'] }
@@ -123,7 +123,7 @@ export const questions: Question[] = [
     scene: "你身受重伤，被困在密室中。面前有两杯水，一杯是你曾经背叛过的旧友递来的，一杯是刚刚救了你的陌生人递来的。",
     options: [
       { text: "喝下旧友的水。背叛的债务需要偿还，如果这是毒药，我坦然接受。", maleIds: ['suhuanzhen', 'qiaorulai', 'yuxingyi'], femaleIds: ['linruomei', 'fengdie'] },
-      { text: "都不喝。我只相信自己，哪怕渴死，也不将性命交于他人之手。", maleIds: ['mocangli', 'wenhuang', 'fengduyue'], femaleIds: ['huanghou', 'yaomingyue', 'weishanhu'] },
+      { text: "都不喝。我只相信自己，哪怕渴死，也不将性命交于他人之手。", maleIds: ['mocangli', 'wenhuang', 'fengduyue', 'wumengsheng'], femaleIds: ['huanghou', 'yaomingyue', 'weishanhu'] },
       { text: "将两杯水混在一起喝下。生死有命，何必去猜忌这无聊的人心。", maleIds: ['jianzi', 'longxiu', 'zuiguangyin'], femaleIds: ['changqin', 'hanyancui'] },
       { text: "喝下陌生人的水。既然他救了我，我便用性命去赌他一次真诚。", maleIds: ['qiluosheng', 'yiqixing', 'fojian', 'kouyinzi'], femaleIds: ['jiwuxia', 'muchengxue', 'jinyanxia'] }
     ]
@@ -135,7 +135,7 @@ export const questions: Question[] = [
     options: [
       { text: "拒绝喝下。痛苦是我存在的证明，没有这些伤痕，我就不再是我。", maleIds: ['fojian', 'yiqixing', 'kouyinzi'], femaleIds: ['jinyanxia', 'muchengxue'] },
       { text: "毫不犹豫地喝下。沉溺于过去是弱者的行为，我只需要轻装上阵迎接未来。", maleIds: ['mocangli', 'wenhuang', 'fengduyue'], femaleIds: ['huanghou', 'yaomingyue'] },
-      { text: "装作喝下，却偷偷倒掉。我需要保持清醒，同时让别人以为我已放下防备。", maleIds: ['yuxingyi', 'suhuanzhen', 'qiaorulai'], femaleIds: ['weishanhu', 'linruomei'] },
+      { text: "装作喝下，却偷偷倒掉。我需要保持清醒，同时让别人以为我已放下防备。", maleIds: ['yuxingyi', 'suhuanzhen', 'qiaorulai', 'wumengsheng'], femaleIds: ['weishanhu', 'linruomei'] },
       { text: "看着泉水发呆。痛苦与美好早已交织在一起，我不知道该如何剥离。", maleIds: ['qiluosheng', 'zuiguangyin', 'longxiu', 'jianzi'], femaleIds: ['fengdie', 'hanyancui', 'changqin', 'jiwuxia'] }
     ]
   },
@@ -147,7 +147,7 @@ export const questions: Question[] = [
       { text: "打开城门，独自迎战。用我最后的鲜血，为这座城池谱写一曲壮烈的挽歌。", maleIds: ['fojian', 'yiqixing', 'qiluosheng'], femaleIds: ['jiwuxia', 'muchengxue', 'jinyanxia'] },
       { text: "点燃整座城池。既然我守不住，那谁也别想得到，让一切在烈火中玉石俱焚。", maleIds: ['fengduyue', 'kouyinzi', 'wenhuang'], femaleIds: ['yaomingyue', 'huanghou'] },
       { text: "安排百姓从密道撤离，自己坐在城头抚琴，静待敌军的到来。", maleIds: ['quezhou', 'jianzi', 'longxiu', 'zuiguangyin'], femaleIds: ['changqin', 'hanyancui'] },
-      { text: "换上敌军的铠甲，混入敌阵，寻找刺杀敌军首领的最后机会。", maleIds: ['mocangli', 'suhuanzhen', 'qiaorulai', 'yuxingyi'], femaleIds: ['weishanhu', 'linruomei', 'fengdie'] }
+      { text: "换上敌军的铠甲，混入敌阵，寻找刺杀敌军首领的最后机会。", maleIds: ['mocangli', 'suhuanzhen', 'qiaorulai', 'yuxingyi', 'wumengsheng'], femaleIds: ['weishanhu', 'linruomei', 'fengdie'] }
     ]
   },
   {
@@ -166,7 +166,7 @@ export const questions: Question[] = [
     dimension: "传承与遗忘",
     scene: "你即将死去，你可以选择在世间留下一件物品作为你存在过的证明。",
     options: [
-      { text: "一本记载了我所有阴谋与智慧的无名手札，留给有缘的聪明人。", maleIds: ['mocangli', 'wenhuang', 'yuxingyi', 'suhuanzhen'], femaleIds: ['huanghou', 'weishanhu', 'changqin'] },
+      { text: "一本记载了我所有阴谋与智慧的无名手札，留给有缘的聪明人。", maleIds: ['mocangli', 'wenhuang', 'yuxingyi', 'suhuanzhen', 'wumengsheng'], femaleIds: ['huanghou', 'weishanhu', 'changqin'] },
       { text: "一把沾满仇人鲜血的断剑，警告后人不要重蹈我的覆辙。", maleIds: ['fojian', 'yiqixing', 'fengduyue', 'kouyinzi'], femaleIds: ['muchengxue', 'yaomingyue'] },
       { text: "一朵被风干的白花，证明这个残酷的世界里，也曾有人温柔地爱过。", maleIds: ['qiluosheng', 'longxiu', 'zuiguangyin', 'qiaorulai'], femaleIds: ['hanyancui', 'fengdie', 'linruomei', 'jinyanxia'] },
       { text: "什么都不留。我来过，我战斗过，我毁灭过，这就足够了，不需要被记住。", maleIds: ['quezhou', 'jianzi'], femaleIds: ['jiwuxia'] }
