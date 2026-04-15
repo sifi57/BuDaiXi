@@ -1,63 +1,63 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronRight, RefreshCcw, Feather } from 'lucide-react';
 import { questions, maleCharacters, femaleCharacters, Character } from './data';
+import { RefreshCw, ChevronRight } from 'lucide-react';
 
-interface ResultData {
-  male: Character;
-  female: Character;
-}
+function App() {
+  const [started, setStarted] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState<number[][]>(Array(questions.length).fill([]));
+  const [showResult, setShowResult] = useState(false);
+  const [maleResult, setMaleResult] = useState<Character | null>(null);
+  const [femaleResult, setFemaleResult] = useState<Character | null>(null);
 
-export default function App() {
-  const [gameState, setGameState] = useState<'START' | 'QUIZ' | 'CALCULATING' | 'RESULT'>('START');
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  
-  const [maleScores, setMaleScores] = useState<Record<string, number>>({});
-  const [femaleScores, setFemaleScores] = useState<Record<string, number>>({});
-  
-  const [resultData, setResultData] = useState<ResultData | null>(null);
-
-  const handleStart = () => {
-    setGameState('QUIZ');
-    setCurrentQuestionIndex(0);
-    
-    // Initialize scores
-    const initialMaleScores: Record<string, number> = {};
-    maleCharacters.forEach(c => initialMaleScores[c.id] = 0);
-    setMaleScores(initialMaleScores);
-    
-    const initialFemaleScores: Record<string, number> = {};
-    femaleCharacters.forEach(c => initialFemaleScores[c.id] = 0);
-    setFemaleScores(initialFemaleScores);
+  const handleOptionClick = (optionIndex: number) => {
+    const currentSelected = answers[currentQuestion];
+    let newSelected;
+    if (currentSelected.includes(optionIndex)) {
+      newSelected = currentSelected.filter(i => i !== optionIndex);
+    } else {
+      if (currentSelected.length >= 3) {
+        return; // Max 3 options
+      }
+      newSelected = [...currentSelected, optionIndex];
+    }
+    const newAnswers = [...answers];
+    newAnswers[currentQuestion] = newSelected;
+    setAnswers(newAnswers);
   };
 
-  const handleOptionClick = (maleIds: string[], femaleIds: string[]) => {
-    const newMaleScores = { ...maleScores };
-    maleIds.forEach(id => {
-      if (newMaleScores[id] !== undefined) newMaleScores[id] += 1;
-    });
-    setMaleScores(newMaleScores);
-
-    const newFemaleScores = { ...femaleScores };
-    femaleIds.forEach(id => {
-      if (newFemaleScores[id] !== undefined) newFemaleScores[id] += 1;
-    });
-    setFemaleScores(newFemaleScores);
-
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+  const handleNext = () => {
+    if (answers[currentQuestion].length === 0) return;
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
     } else {
-      setGameState('CALCULATING');
-      setTimeout(() => {
-        calculateResult(newMaleScores, newFemaleScores);
-      }, 2500);
+      calculateResult();
     }
   };
 
-  const calculateResult = (finalMaleScores: Record<string, number>, finalFemaleScores: Record<string, number>) => {
+  const calculateResult = () => {
+    const maleScores: Record<string, number> = {};
+    const femaleScores: Record<string, number> = {};
+
+    maleCharacters.forEach(c => maleScores[c.id] = 0);
+    femaleCharacters.forEach(c => femaleScores[c.id] = 0);
+
+    answers.forEach((selectedOptions, qIndex) => {
+      selectedOptions.forEach(optionIndex => {
+        const option = questions[qIndex].options[optionIndex];
+        option.maleIds.forEach(id => {
+          if (maleScores[id] !== undefined) maleScores[id]++;
+        });
+        option.femaleIds.forEach(id => {
+          if (femaleScores[id] !== undefined) femaleScores[id]++;
+        });
+      });
+    });
+
     let topMaleId = maleCharacters[0].id;
     let maxMaleScore = -1;
-    for (const [id, score] of Object.entries(finalMaleScores)) {
+    for (const [id, score] of Object.entries(maleScores)) {
       if (score > maxMaleScore) {
         maxMaleScore = score;
         topMaleId = id;
@@ -66,202 +66,224 @@ export default function App() {
 
     let topFemaleId = femaleCharacters[0].id;
     let maxFemaleScore = -1;
-    for (const [id, score] of Object.entries(finalFemaleScores)) {
+    for (const [id, score] of Object.entries(femaleScores)) {
       if (score > maxFemaleScore) {
         maxFemaleScore = score;
         topFemaleId = id;
       }
     }
 
-    const maleChar = maleCharacters.find(c => c.id === topMaleId) || maleCharacters[0];
-    const femaleChar = femaleCharacters.find(c => c.id === topFemaleId) || femaleCharacters[0];
+    setMaleResult(maleCharacters.find(c => c.id === topMaleId) || maleCharacters[0]);
+    setFemaleResult(femaleCharacters.find(c => c.id === topFemaleId) || femaleCharacters[0]);
+    setShowResult(true);
+  };
 
-    setResultData({
-      male: maleChar,
-      female: femaleChar
+  const resetQuiz = () => {
+    setStarted(false);
+    setCurrentQuestion(0);
+    setAnswers(Array(questions.length).fill([]));
+    setShowResult(false);
+    setMaleResult(null);
+    setFemaleResult(null);
+  };
+
+  const renderAnalysis = (text: string) => {
+    return text.split('\n\n').map((paragraph, index) => {
+      const match = paragraph.match(/^(【.*?】)(.*)/s);
+      if (match) {
+        return (
+          <div key={index} className="mb-4">
+            <h4 className="text-lg font-bold text-amber-500 mb-2">{match[1]}</h4>
+            <p className="text-gray-300 leading-relaxed text-justify">{match[2].trim()}</p>
+          </div>
+        );
+      }
+      return <p key={index} className="text-gray-300 leading-relaxed text-justify mb-4">{paragraph}</p>;
     });
-    setGameState('RESULT');
-  };
-
-  const renderStart = () => (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.8 }}
-      className="flex flex-col items-center justify-center min-h-screen p-6 text-center"
-    >
-      <div className="mb-8">
-        <Feather className="w-12 h-12 mx-auto mb-6 text-yellow-600 opacity-80" />
-        <h1 className="text-4xl md:text-5xl font-serif font-semibold tracking-widest mb-4 text-glow">
-          布袋戏人格镜像测试
-        </h1>
-        <p className="text-gray-400 text-lg md:text-xl tracking-wide max-w-xl mx-auto leading-relaxed">
-          在血雨腥风与诗酒风流之间，<br/>寻找那个与你灵魂共振的江湖倒影。
-        </p>
-      </div>
-      
-      <button 
-        onClick={handleStart}
-        className="group relative px-8 py-3 overflow-hidden rounded-sm bg-transparent border border-yellow-700/50 hover:border-yellow-500 transition-colors duration-500"
-      >
-        <div className="absolute inset-0 w-0 bg-yellow-900/20 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
-        <span className="relative flex items-center text-yellow-500 tracking-widest font-serif text-lg">
-          入局 <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-        </span>
-      </button>
-    </motion.div>
-  );
-
-  const renderQuiz = () => {
-    const question = questions[currentQuestionIndex];
-    return (
-      <motion.div 
-        key={question.id}
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
-        transition={{ duration: 0.6 }}
-        className="flex flex-col min-h-screen p-6 max-w-3xl mx-auto justify-center"
-      >
-        <div className="mb-12 text-center">
-          <span className="text-yellow-700/60 text-sm tracking-widest font-serif mb-4 block">
-            — 卷之{question.id} · {question.dimension} —
-          </span>
-          <h2 className="text-2xl md:text-3xl font-serif leading-relaxed text-gray-200">
-            {question.scene}
-          </h2>
-        </div>
-
-        <div className="space-y-4">
-          {question.options.map((option, index) => (
-            <button
-              key={index}
-              onClick={() => handleOptionClick(option.maleIds, option.femaleIds)}
-              className="w-full text-left p-6 glass-panel hover:bg-white/5 transition-all duration-300 group rounded-sm border-l-2 border-l-transparent hover:border-l-yellow-600"
-            >
-              <p className="text-gray-300 font-serif text-lg leading-relaxed group-hover:text-yellow-50 transition-colors">
-                {option.text}
-              </p>
-            </button>
-          ))}
-        </div>
-        
-        <div className="mt-12 flex justify-center">
-          <div className="flex gap-2">
-            {questions.map((_, idx) => (
-              <div 
-                key={idx} 
-                className={`h-1 w-8 rounded-full transition-all duration-500 ${
-                  idx === currentQuestionIndex ? 'bg-yellow-600' : 
-                  idx < currentQuestionIndex ? 'bg-yellow-900/50' : 'bg-gray-800'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </motion.div>
-    );
-  };
-
-  const renderCalculating = () => (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="flex flex-col items-center justify-center min-h-screen p-6"
-    >
-      <div className="relative w-24 h-24 mb-8">
-        <div className="absolute inset-0 border-t-2 border-yellow-600 rounded-full animate-spin"></div>
-        <div className="absolute inset-2 border-r-2 border-yellow-800 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
-        <Feather className="absolute inset-0 m-auto w-8 h-8 text-yellow-700 opacity-50" />
-      </div>
-      <p className="text-xl font-serif tracking-widest text-gray-400 animate-pulse">
-        勘破命盘，寻觅倒影...
-      </p>
-    </motion.div>
-  );
-
-  const renderResult = () => {
-    if (!resultData) return null;
-
-    return (
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="min-h-screen py-16 px-6 max-w-5xl mx-auto"
-      >
-        <div className="text-center mb-16">
-          <p className="text-yellow-600/80 tracking-widest text-sm mb-4 font-serif">你的灵魂镜像</p>
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-glow mb-2">
-            {resultData.male.name} × {resultData.female.name}
-          </h1>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          {/* Male Character */}
-          <div className="glass-panel p-8 rounded-sm relative overflow-hidden group flex flex-col">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-900/10 rounded-bl-full -z-10 group-hover:bg-yellow-900/20 transition-colors"></div>
-            <h3 className="text-gray-400 text-sm tracking-widest mb-2">男相化身</h3>
-            <h2 className="text-3xl font-serif text-yellow-500 mb-6">{resultData.male.name}</h2>
-            <p className="font-serif text-gray-300 italic leading-loose border-l-2 border-yellow-800/50 pl-4 mb-8">
-              "{resultData.male.poem}"
-            </p>
-            <div className="mt-auto">
-              <div className="space-y-4 font-serif text-gray-400 leading-relaxed text-justify">
-                {resultData.male.analysis.split('\n').map((paragraph, idx) => {
-                  if (paragraph.startsWith('【')) {
-                    return <h4 key={idx} className="text-lg text-yellow-600/90 mt-4 mb-2">{paragraph}</h4>;
-                  }
-                  return <p key={idx}>{paragraph}</p>;
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Female Character */}
-          <div className="glass-panel p-8 rounded-sm relative overflow-hidden group flex flex-col">
-            <div className="absolute top-0 left-0 w-32 h-32 bg-yellow-900/10 rounded-br-full -z-10 group-hover:bg-yellow-900/20 transition-colors"></div>
-            <h3 className="text-gray-400 text-sm tracking-widest mb-2">女相化身</h3>
-            <h2 className="text-3xl font-serif text-yellow-500 mb-6">{resultData.female.name}</h2>
-            <p className="font-serif text-gray-300 italic leading-loose border-l-2 border-yellow-800/50 pl-4 mb-8">
-              "{resultData.female.poem}"
-            </p>
-            <div className="mt-auto">
-              <div className="space-y-4 font-serif text-gray-400 leading-relaxed text-justify">
-                {resultData.female.analysis.split('\n').map((paragraph, idx) => {
-                  if (paragraph.startsWith('【')) {
-                    return <h4 key={idx} className="text-lg text-yellow-600/90 mt-4 mb-2">{paragraph}</h4>;
-                  }
-                  return <p key={idx}>{paragraph}</p>;
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="text-center pb-12">
-          <button 
-            onClick={handleStart}
-            className="inline-flex items-center px-6 py-3 text-gray-400 hover:text-yellow-500 transition-colors font-serif tracking-widest"
-          >
-            <RefreshCcw className="w-4 h-4 mr-2" />
-            重入江湖
-          </button>
-        </div>
-      </motion.div>
-    );
   };
 
   return (
-    <div className="min-h-screen selection:bg-yellow-900/50 selection:text-yellow-100">
-      <AnimatePresence mode="wait">
-        {gameState === 'START' && renderStart()}
-        {gameState === 'QUIZ' && renderQuiz()}
-        {gameState === 'CALCULATING' && renderCalculating()}
-        {gameState === 'RESULT' && renderResult()}
-      </AnimatePresence>
+    <div className="min-h-screen bg-black text-neutral-200 font-serif selection:bg-amber-900/50">
+      <div className="fixed inset-0 pointer-events-none opacity-20 bg-[url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay"></div>
+      <div className="fixed inset-0 pointer-events-none bg-gradient-to-b from-neutral-950/50 via-transparent to-neutral-950/80"></div>
+      
+      <main className="relative z-10 max-w-4xl mx-auto px-6 py-12 min-h-screen flex flex-col items-center justify-center">
+        <AnimatePresence mode="wait">
+          {!started ? (
+            <motion.div
+              key="start"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-center space-y-8"
+            >
+              <div className="space-y-4">
+                <h1 className="text-5xl md:text-7xl font-bold tracking-widest text-white pb-2 drop-shadow-md">
+                  布袋戏人格镜像测试
+                </h1>
+                <p className="text-xl text-neutral-400 tracking-widest font-light">
+                  在诗号与刀剑交织的江湖中，寻找你的灵魂倒影
+                </p>
+              </div>
+              
+              <div className="max-w-2xl mx-auto text-amber-500 leading-relaxed space-y-4 text-sm md:text-base">
+                <p>
+                  本测试包含15道文学性情境题，将从理性、感性、存在与社会四个象限，
+                  深度剖析你的内在人格。
+                </p>
+                <p>
+                  每道题可单选或多选（最多三项）。测试结束后，你将获得男相与女相两位布袋戏角色的镜像化身，
+                  以及约1200字的深度性格解析。
+                </p>
+              </div>
+
+              <button
+                onClick={() => setStarted(true)}
+                className="group relative px-8 py-4 bg-transparent overflow-hidden rounded-sm border border-neutral-800 hover:border-amber-600/50 transition-colors duration-500"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <span className="relative z-10 text-lg tracking-[0.2em] text-neutral-300 group-hover:text-white transition-colors duration-300">
+                  入局
+                </span>
+              </button>
+            </motion.div>
+          ) : !showResult ? (
+            <motion.div
+              key="quiz"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.5 }}
+              className="w-full max-w-3xl"
+            >
+              <div className="mb-12 text-center">
+                <span className="text-sm font-mono tracking-widest text-amber-600/80">
+                  {String(currentQuestion + 1).padStart(2, '0')} / {questions.length}
+                </span>
+                <div className="mt-4 h-px w-full bg-neutral-900 relative">
+                  <motion.div 
+                    className="absolute top-0 left-0 h-full bg-amber-600/50"
+                    initial={{ width: `${(currentQuestion / questions.length) * 100}%` }}
+                    animate={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+                    transition={{ duration: 0.5 }}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-8">
+                <div className="space-y-4">
+                  <h2 className="text-sm tracking-widest text-neutral-500">
+                    【 {questions[currentQuestion].dimension} 】
+                  </h2>
+                  <p className="text-2xl leading-relaxed text-neutral-200">
+                    {questions[currentQuestion].scene}
+                  </p>
+                  <p className="text-xs text-neutral-500">（可多选，最多三项）</p>
+                </div>
+
+                <div className="space-y-4">
+                  {questions[currentQuestion].options.map((option, index) => {
+                    const isSelected = answers[currentQuestion].includes(index);
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => handleOptionClick(index)}
+                        className={`w-full text-left p-6 rounded-sm border transition-all duration-300 group relative overflow-hidden
+                          ${isSelected 
+                            ? 'border-amber-600/50 bg-amber-900/20' 
+                            : 'border-neutral-800 hover:border-neutral-600 bg-neutral-900/30'}`}
+                      >
+                        <div className={`absolute inset-0 bg-gradient-to-r from-amber-900/20 to-transparent opacity-0 transition-opacity duration-300
+                          ${isSelected ? 'opacity-100' : 'group-hover:opacity-100'}`}></div>
+                        <span className={`relative z-10 text-lg leading-relaxed transition-colors duration-300
+                          ${isSelected ? 'text-white' : 'text-neutral-400 group-hover:text-neutral-200'}`}>
+                          {option.text}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="pt-8 flex justify-end">
+                  <button
+                    onClick={handleNext}
+                    disabled={answers[currentQuestion].length === 0}
+                    className={`flex items-center space-x-2 px-6 py-3 rounded-sm transition-all duration-300
+                      ${answers[currentQuestion].length > 0
+                        ? 'text-neutral-200 hover:text-white bg-neutral-800 hover:bg-neutral-700'
+                        : 'text-neutral-600 cursor-not-allowed'}`}
+                  >
+                    <span className="tracking-widest">{currentQuestion === questions.length - 1 ? '观照' : '继续'}</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="result"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              className="w-full max-w-5xl"
+            >
+              <div className="text-center mb-16 space-y-4">
+                <h2 className="text-3xl tracking-widest text-neutral-400">灵魂镜像</h2>
+                <div className="h-px w-24 bg-amber-600/50 mx-auto"></div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-12 md:gap-8">
+                {/* Male Result */}
+                <div className="space-y-8 p-8 border border-neutral-800 bg-neutral-900/20 rounded-sm relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 text-neutral-800 text-6xl font-black opacity-20 pointer-events-none">
+                    男相
+                  </div>
+                  <div className="space-y-4 relative z-10">
+                    <h3 className="text-sm tracking-widest text-neutral-500">男相化身</h3>
+                    <h2 className="text-4xl font-bold text-white tracking-wider">{maleResult?.name}</h2>
+                    <p className="text-lg text-amber-500/80 italic leading-relaxed">
+                      「{maleResult?.poem}」
+                    </p>
+                  </div>
+                  <div className="prose prose-invert prose-neutral max-w-none">
+                    {maleResult && renderAnalysis(maleResult.analysis)}
+                  </div>
+                </div>
+
+                {/* Female Result */}
+                <div className="space-y-8 p-8 border border-neutral-800 bg-neutral-900/20 rounded-sm relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 text-neutral-800 text-6xl font-black opacity-20 pointer-events-none">
+                    女相
+                  </div>
+                  <div className="space-y-4 relative z-10">
+                    <h3 className="text-sm tracking-widest text-neutral-500">女相化身</h3>
+                    <h2 className="text-4xl font-bold text-white tracking-wider">{femaleResult?.name}</h2>
+                    <p className="text-lg text-amber-500/80 italic leading-relaxed">
+                      「{femaleResult?.poem}」
+                    </p>
+                  </div>
+                  <div className="prose prose-invert prose-neutral max-w-none">
+                    {femaleResult && renderAnalysis(femaleResult.analysis)}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-16 text-center">
+                <button
+                  onClick={resetQuiz}
+                  className="inline-flex items-center space-x-3 px-8 py-4 border border-neutral-800 hover:border-amber-600/50 text-neutral-400 hover:text-white transition-all duration-300 rounded-sm group"
+                >
+                  <RefreshCw className="w-5 h-5 group-hover:rotate-180 transition-transform duration-700" />
+                  <span className="tracking-[0.2em]">重新入局</span>
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
     </div>
   );
 }
+
+export default App;

@@ -1,4 +1,6 @@
-import { Character, Question, Option } from './types';
+const fs = require('fs');
+
+const dataContent = `import { Character, Question, Option } from './types';
 import { maleCharacters as oldMale } from './characters_male';
 import { femaleCharacters as oldFemale } from './characters_female';
 import { newMaleCharacters, newFemaleCharacters } from './new_chars';
@@ -191,3 +193,7 @@ export const questions: Question[] = [
     ]
   }
 ];
+`;
+
+fs.writeFileSync('src/data.ts', dataContent);
+console.log('Updated data.ts');
