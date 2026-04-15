@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { questions, maleCharacters, femaleCharacters, Character } from './data';
-import { RefreshCw, ChevronRight } from 'lucide-react';
+import { RefreshCw, ChevronRight, Feather } from 'lucide-react';
 
 function App() {
   const [started, setStarted] = useState(false);
@@ -103,10 +103,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-neutral-200 font-serif selection:bg-amber-900/50">
-      <div className="fixed inset-0 pointer-events-none opacity-20 bg-[url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay"></div>
-      <div className="fixed inset-0 pointer-events-none bg-gradient-to-b from-neutral-950/50 via-transparent to-neutral-950/80"></div>
-      
+    <div className="min-h-screen bg-[#0a0a0a] text-neutral-200 font-serif selection:bg-amber-900/50">
       <main className="relative z-10 max-w-4xl mx-auto px-6 py-12 min-h-screen flex flex-col items-center justify-center">
         <AnimatePresence mode="wait">
           {!started ? (
@@ -118,35 +115,25 @@ function App() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="text-center space-y-8"
             >
-              <div className="space-y-4">
-                <h1 className="text-5xl md:text-7xl font-bold tracking-widest text-white pb-2 drop-shadow-md">
-                  布袋戏人格镜像测试
+              <div className="flex flex-col items-center justify-center w-full">
+                <Feather className="w-12 h-12 text-[#c69c6d] mb-8 transform -scale-x-100" strokeWidth={1.5} />
+                
+                <h1 className="text-4xl md:text-5xl font-medium tracking-[0.15em] text-neutral-100 drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] leading-[1.4] text-center mb-12">
+                  布袋戏人格镜像测<br/>试
                 </h1>
-                <p className="text-xl text-neutral-400 tracking-widest font-light">
-                  在诗号与刀剑交织的江湖中，寻找你的灵魂倒影
+                
+                <p className="text-base md:text-lg text-neutral-400 tracking-[0.1em] font-light leading-relaxed text-center mb-16">
+                  在血雨腥风与诗酒风流之间，<br/>寻找那个与你灵魂共振的江湖倒影。
                 </p>
-              </div>
-              
-              <div className="max-w-2xl mx-auto text-amber-500 leading-relaxed space-y-4 text-sm md:text-base">
-                <p>
-                  本测试包含15道文学性情境题，将从理性、感性、存在与社会四个象限，
-                  深度剖析你的内在人格。
-                </p>
-                <p>
-                  每道题可单选或多选（最多三项）。测试结束后，你将获得男相与女相两位布袋戏角色的镜像化身，
-                  以及约1200字的深度性格解析。
-                </p>
-              </div>
 
-              <button
-                onClick={() => setStarted(true)}
-                className="group relative px-8 py-4 bg-transparent overflow-hidden rounded-sm border border-neutral-800 hover:border-amber-600/50 transition-colors duration-500"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-amber-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <span className="relative z-10 text-lg tracking-[0.2em] text-neutral-300 group-hover:text-white transition-colors duration-300">
-                  入局
-                </span>
-              </button>
+                <button
+                  onClick={() => setStarted(true)}
+                  className="flex items-center justify-center space-x-3 px-10 py-3 bg-transparent rounded-md border border-[#c69c6d]/40 hover:border-[#c69c6d] transition-colors duration-300"
+                >
+                  <span className="text-lg tracking-[0.3em] text-[#c69c6d] ml-2">入局</span>
+                  <ChevronRight className="w-5 h-5 text-[#c69c6d]" />
+                </button>
+              </div>
             </motion.div>
           ) : !showResult ? (
             <motion.div
