@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { questions, maleCharacters, femaleCharacters, Character } from './data';
+import { questions, maleCharacters, femaleCharacters } from './data';
+import { Character } from './types';
 import { RefreshCw, ChevronRight, Feather } from 'lucide-react';
 
 function App() {
